@@ -1,34 +1,21 @@
 import { BrickDefinition, BrickId, BrickInstance } from './types';
 import { ClockProvider } from './clock/ClockContext';
 import { ClockTileContent } from './clock/ClockTileContent';
+import { WaitTimeProvider, useWaitTimeAccentColor } from './waitTime/WaitTimeContext';
+import { WaitTimeTileContent } from './waitTime/WaitTimeTileContent';
 
 export const BRICK_REGISTRY: BrickDefinition[] = [
   {
-    id: 'naolib',
-    label: 'Transports TAN',
-    description: 'Prochains passages aux arrêts de bus et tram.',
-    icon: '🚌',
-    accentColor: '#2563EB',
-    route: '/bricks/naolib',
-    defaultEnabled: true,
-  },
-  {
-    id: 'weather',
-    label: 'Météo Nantes',
-    description: 'Conditions météo actuelles.',
-    icon: '🌦️',
-    accentColor: '#0891B2',
-    route: '/bricks/weather',
-    defaultEnabled: true,
-  },
-  {
-    id: 'agenda',
-    label: 'Agenda',
-    description: 'Vos prochains événements.',
-    icon: '📅',
-    accentColor: '#7C3AED',
-    route: '/bricks/agenda',
-    defaultEnabled: true,
+    id: 'wait-time',
+    label: 'Prochain passage',
+    description: 'Affiche les prochains passages d\'une ligne à un arrêt.',
+    icon: '🚏',
+    accentColor: '#059669',
+    route: '/bricks/wait-time',
+    defaultEnabled: false,
+    Provider: WaitTimeProvider,
+    TileContent: WaitTimeTileContent,
+    useAccentColor: useWaitTimeAccentColor,
   },
   {
     id: 'clock',

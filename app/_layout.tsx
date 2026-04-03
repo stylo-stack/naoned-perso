@@ -29,10 +29,8 @@ export default function RootLayout() {
                 name="catalogue"
                 options={{ presentation: 'modal' }}
               />
-              <Stack.Screen name="bricks/naolib" />
-              <Stack.Screen name="bricks/weather" />
-              <Stack.Screen name="bricks/agenda" />
               <Stack.Screen name="bricks/clock" />
+              <Stack.Screen name="bricks/wait-time" />
             </Stack>
           </DashboardContext.Provider>
         </BrickProviders>

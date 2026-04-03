@@ -14,6 +14,8 @@ export interface BrickDefinition {
   Provider?: React.ComponentType<{ children: React.ReactNode }>;
   /** Optional component rendered inside the dashboard tile instead of icon + label. */
   TileContent?: React.ComponentType;
+  /** Optional hook that returns a dynamic accent color, overriding accentColor on the tile. */
+  useAccentColor?: () => string;
 }
 
 export interface BrickInstance {

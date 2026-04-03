@@ -12,12 +12,19 @@ export function BrickTile({ definition, onPress }: Props) {
   const { width: screenWidth } = useWindowDimensions();
   const tileSize = (screenWidth - spacing.base * 2 - spacing.sm) / 2;
 
+  if (definition.useAccentColor) {
+    return (
+      <DynamicColorTile
+        definition={definition}
+        onPress={onPress}
+        tileSize={tileSize}
+        useAccentColor={definition.useAccentColor}
+      />
+    );
+  }
+
   return (
-    <TouchableOpacity
-      style={[styles.container, { width: tileSize, height: tileSize, backgroundColor: definition.accentColor }]}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
+    <TileShell color={definition.accentColor} tileSize={tileSize} onPress={onPress}>
       {definition.TileContent ? (
         <definition.TileContent />
       ) : (
@@ -26,6 +33,49 @@ export function BrickTile({ definition, onPress }: Props) {
           <Text style={styles.label}>{definition.label}</Text>
         </>
       )}
+    </TileShell>
+  );
+}
+
+function DynamicColorTile({
+  definition,
+  onPress,
+  tileSize,
+  useAccentColor,
+}: Props & { tileSize: number; useAccentColor: () => string }) {
+  const color = useAccentColor();
+  return (
+    <TileShell color={color} tileSize={tileSize} onPress={onPress}>
+      {definition.TileContent ? (
+        <definition.TileContent />
+      ) : (
+        <>
+          <Text style={styles.icon}>{definition.icon}</Text>
+          <Text style={styles.label}>{definition.label}</Text>
+        </>
+      )}
+    </TileShell>
+  );
+}
+
+function TileShell({
+  color,
+  tileSize,
+  onPress,
+  children,
+}: {
+  color: string;
+  tileSize: number;
+  onPress: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <TouchableOpacity
+      style={[styles.container, { width: tileSize, height: tileSize, backgroundColor: color }]}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      {children}
     </TouchableOpacity>
   );
 }
