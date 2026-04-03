@@ -14,7 +14,7 @@ export function ScreenHeader({ title, leftAction, rightAction }: Props) {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + spacing.sm }]}>
-      <View style={styles.side}>{leftAction ?? null}</View>
+      <View style={[styles.side, styles.sideLeft]}>{leftAction ?? null}</View>
       <Text style={styles.title} numberOfLines={1}>
         {title}
       </Text>
@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
   side: {
     width: 64,
     alignItems: 'flex-end',
+  },
+  sideLeft: {
+    alignItems: 'flex-start',
   },
   buttonText: {
     ...typography.body,

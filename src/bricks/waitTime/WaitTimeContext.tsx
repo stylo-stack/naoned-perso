@@ -1,3 +1,4 @@
+import i18n from '@/i18n';
 import React, {
   createContext,
   useCallback,
@@ -35,8 +36,9 @@ type WaitTimeContextValue = {
   error: string | null;
   refresh: () => void;
   lastFetchTimestamp?: number;
+  intervalLength: number;
 };
-
+const INTERVAL_LENGTH = 60000;
 const WaitTimeContext = createContext<WaitTimeContextValue>({
   config: null,
   configLoading: true,
@@ -45,6 +47,7 @@ const WaitTimeContext = createContext<WaitTimeContextValue>({
   loading: false,
   error: null,
   refresh: () => {},
+  intervalLength: INTERVAL_LENGTH
 });
 
 function toDeperture(wt: WaitTime): Departure {
@@ -55,8 +58,6 @@ function toDeperture(wt: WaitTime): Departure {
     tempsReel: wt.tempsReel,
   };
 }
-
-export const INTERVAL_LENGTH = 60000;
 
 function storageKey(instanceId: string): string {
   return `@wait-time-config-${instanceId}`;
@@ -86,12 +87,15 @@ function notifyConfigListeners(instanceId: string, config: WaitTimeConfig): void
   configListeners.get(instanceId)?.forEach((cb) => cb(config));
 }
 
+
 export function WaitTimeProvider({
   children,
   instanceId,
+  intervalLength = INTERVAL_LENGTH
 }: {
   children: React.ReactNode;
   instanceId: string;
+  intervalLength?: number;
 }) {
   const [config, setConfigState] = useState<WaitTimeConfig | null>(null);
   const [configLoading, setConfigLoading] = useState(true);
@@ -149,7 +153,7 @@ export function WaitTimeProvider({
       setDepartures(results.map(toDeperture));
       setError(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Erreur inconnue");
+      setError(e instanceof Error ? e.message : i18n.t('errors.unknown'));
     } finally {
       setLoading(false);
       setLastFetchTimestamp(Date.now());
@@ -159,7 +163,7 @@ export function WaitTimeProvider({
   useEffect(() => {
     if (!config) return;
     fetchDepartures();
-    const interval = setInterval(fetchDepartures, INTERVAL_LENGTH);
+    const interval = setInterval(fetchDepartures, intervalLength);
     return () => clearInterval(interval);
   }, [config, fetchDepartures]);
 
@@ -174,6 +178,7 @@ export function WaitTimeProvider({
         error,
         refresh: fetchDepartures,
         lastFetchTimestamp,
+        intervalLength
       }}
     >
       {children}
@@ -190,7 +195,7 @@ export function useWaitTime(): WaitTimeContextValue {
 }
 
 export function formatMinutes(minutes: number | null): string {
-  if (minutes === null) return "?";
+  if (minutes === null) return "-";
   if (minutes === 0) return "<1";
   return String(minutes);
 }

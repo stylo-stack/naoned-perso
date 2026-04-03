@@ -1,17 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useClockTime, formatNantesTime } from '../ClockContext';
+import { useTranslation } from 'react-i18next';
+import { useNow } from '../hooks/useNow';
 
 export function ClockTileContent() {
-  const now = useClockTime();
-  const { hours, minutes } = formatNantesTime(now);
+  const {formattedTime: { hours, minutes }} = useNow();
+  const {t} = useTranslation()
 
   return (
     <View style={styles.container}>
       <Text style={styles.time}>
         {hours}:{minutes}
       </Text>
-      <Text style={styles.label}>Nantes</Text>
+      <Text style={styles.label}>{t("common.nantes")}</Text>
     </View>
   );
 }
@@ -19,6 +20,7 @@ export function ClockTileContent() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+    margin: "auto",
   },
   time: {
     fontSize: 38,

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   ScrollView,
@@ -20,6 +21,7 @@ import { NextRefreshCountdown } from "@/components/NextRefreshCountdown";
 import { useNextFetchCountdown } from "@/bricks/waitTime/hooks/useNextFetchCountdown";
 
 function WaitTimeScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const {
     config,
@@ -29,6 +31,7 @@ function WaitTimeScreen() {
     loading,
     error,
   } = useWaitTime();
+
   const { percent } = useNextFetchCountdown();
   const [isConfiguring, setIsConfiguring] = useState(false);
 
@@ -41,10 +44,10 @@ function WaitTimeScreen() {
     return (
       <View style={styles.screen}>
         <ScreenHeader
-          title="Prochain passage"
+          title={t('bricks.wait-time.screen.title')}
           leftAction={
             <HeaderButton
-              label="‹ Retour"
+              label={t('common.back')}
               onPress={() => router.back()}
               variant="back"
             />
@@ -61,16 +64,16 @@ function WaitTimeScreen() {
     return (
       <View style={styles.screen}>
         <ScreenHeader
-          title={isConfiguring ? "Configurer" : "Configurer l'arrêt"}
+          title={isConfiguring ? t('bricks.wait-time.screen.configureTitle') : t('bricks.wait-time.screen.configureStopTitle')}
           leftAction={
             isConfiguring ? (
               <HeaderButton
-                label="Annuler"
+                label={t('common.cancel')}
                 onPress={() => setIsConfiguring(false)}
               />
             ) : (
               <HeaderButton
-                label="‹ Retour"
+                label={t('common.back')}
                 onPress={() => router.back()}
                 variant="back"
               />
@@ -85,17 +88,17 @@ function WaitTimeScreen() {
   return (
     <View style={styles.screen}>
       <ScreenHeader
-        title={`Ligne ${config?.numLigne} — ${config.stopLabel}`}
+        title={t('bricks.wait-time.screen.lineTitle', { numLigne: config.numLigne, stopLabel: config.stopLabel })}
         leftAction={
           <HeaderButton
-            label="‹ Retour"
+            label={t('common.back')}
             onPress={() => router.back()}
             variant="back"
           />
         }
         rightAction={
           <HeaderButton
-            label="Modifier"
+            label={t('common.edit')}
             onPress={() => setIsConfiguring(true)}
           />
         }
@@ -121,7 +124,7 @@ function WaitTimeScreen() {
 
         {!loading && !error && departures.length === 0 && (
           <View style={styles.centered}>
-            <Text style={styles.emptyText}>Aucun passage prévu.</Text>
+            <Text style={styles.emptyText}>{t('bricks.wait-time.screen.noPassage')}</Text>
           </View>
         )}
         {departures.map((dep, i) => (
@@ -144,7 +147,7 @@ function WaitTimeScreen() {
                   <Text
                     style={[styles.realtimeText, { color: config.lineColor }]}
                   >
-                    Temps réel
+                    {t('common.realtime')}
                   </Text>
                 </View>
               )}
@@ -162,7 +165,7 @@ function WaitTimeScreen() {
               >
                 {formatMinutes(dep.minutes)}
               </Text>
-              <Text style={styles.minutesLabel}>min</Text>
+              <Text style={styles.minutesLabel}>{t('common.min')}</Text>
             </View>
           </View>
         ))}
@@ -173,8 +176,9 @@ function WaitTimeScreen() {
 
 export default function WaitTimeScreenWrapper() {
   const { instanceId } = useLocalSearchParams<{ instanceId: string }>();
+
   return (
-    <WaitTimeProvider instanceId={instanceId ?? "default"}>
+    <WaitTimeProvider instanceId={instanceId ?? "default"} intervalLength={20000}>
       <WaitTimeScreen />
     </WaitTimeProvider>
   );

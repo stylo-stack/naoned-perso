@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
 import * as Haptics from 'expo-haptics';
 import { useDashboardContext } from '@/context/DashboardContext';
@@ -13,6 +14,7 @@ import { EmptyDashboard } from '@/components/EmptyDashboard';
 import { colors, spacing, typography } from '@/theme';
 
 export default function DashboardScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { bricks, isLoading, isEditMode, toggleEditMode, removeBrick, onDragEnd } =
     useDashboardContext();
@@ -69,11 +71,16 @@ export default function DashboardScreen() {
     <View style={styles.screen}>
       <ScreenHeader
         title="Naoned"
+        leftAction={
+          !isEditMode ? (
+            <HeaderButton label="⚙" onPress={() => router.push('/settings')} />
+          ) : undefined
+        }
         rightAction={
           isEditMode ? (
-            <HeaderButton label="Terminer" onPress={handleDonePress} variant="primary" />
+            <HeaderButton label={t('common.done')} onPress={handleDonePress} variant="primary" />
           ) : (
-            <HeaderButton label="Modifier" onPress={handleEditPress} />
+            <HeaderButton label={t('common.edit')} onPress={handleEditPress} />
           )
         }
       />
@@ -101,7 +108,7 @@ export default function DashboardScreen() {
           onPress={() => router.push('/catalogue')}
           activeOpacity={0.85}
         >
-          <Text style={styles.addButtonLabel}>+ Ajouter une tuile</Text>
+          <Text style={styles.addButtonLabel}>{t('dashboard.addTile')}</Text>
         </TouchableOpacity>
       )}
     </View>

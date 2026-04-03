@@ -1,5 +1,4 @@
 import { BrickDefinition, BrickId, BrickInstance } from "./types";
-import { ClockProvider } from "./clock/ClockContext";
 import { ClockTileContent } from "./clock/tile/ClockTileContent";
 import {
   WaitTimeProvider,
@@ -10,8 +9,8 @@ import { WaitTimeTileContent } from "./waitTime/tile/WaitTimeTileContent";
 export const BRICK_REGISTRY: BrickDefinition[] = [
   {
     id: "wait-time",
-    label: "Prochain passage",
-    description: "Affiche les prochains passages d'une ligne à un arrêt.",
+    labelKey: "bricks.wait-time.label",
+    descriptionKey: "bricks.wait-time.description",
     icon: "🚏",
     accentColor: "#059669",
     route: "/bricks/wait-time",
@@ -23,13 +22,12 @@ export const BRICK_REGISTRY: BrickDefinition[] = [
   },
   {
     id: "clock",
-    label: "Heure à Nantes",
-    description: "L'heure actuelle à Nantes.",
+    labelKey: "bricks.clock.label",
+    descriptionKey: "bricks.clock.description",
     icon: "🕐",
     accentColor: "#1E293B",
     route: "/bricks/clock",
     defaultEnabled: false,
-    Provider: ClockProvider,
     TileContent: ClockTileContent,
   },
 ];

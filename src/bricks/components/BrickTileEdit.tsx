@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function BrickTileEdit({ definition, drag, isActive, onRemove }: Props) {
+  const { t } = useTranslation();
   const { width: screenWidth } = useWindowDimensions();
   const tileSize = (screenWidth - spacing.base * 2 - spacing.sm) / 2;
 
@@ -50,7 +52,7 @@ export function BrickTileEdit({ definition, drag, isActive, onRemove }: Props) {
         activeOpacity={0.85}
       >
         <Text style={styles.icon}>{definition.icon}</Text>
-        <Text style={styles.label}>{definition.label}</Text>
+        <Text style={styles.label}>{t(definition.labelKey)}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.removeButton} onPress={onRemove} hitSlop={8}>
