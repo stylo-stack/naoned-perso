@@ -177,12 +177,6 @@ function WaitTimeScreen() {
 export default function WaitTimeScreenWrapper() {
   const { instanceId } = useLocalSearchParams<{ instanceId: string }>();
 
-  useEffect(()=> {
-    return ()=>{
-      console.log("unrender")
-    }
-  },[])
-
   return (
     <WaitTimeProvider instanceId={instanceId ?? "default"} intervalLength={20000}>
       <WaitTimeScreen />
