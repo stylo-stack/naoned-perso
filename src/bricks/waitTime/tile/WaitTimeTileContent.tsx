@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { useWaitTime, formatMinutes } from "../WaitTimeContext";
 import { NextRefreshCountdown } from "@/components/NextRefreshCountdown";
 import { useNextFetchCountdown } from "../hooks/useNextFetchCountdown";
@@ -7,6 +8,7 @@ import { useNextFetchCountdown } from "../hooks/useNextFetchCountdown";
 
 
 export function WaitTimeTileContent() {
+  const { t } = useTranslation();
   const { config, configLoading, departures, loading} =
     useWaitTime();
 
@@ -17,7 +19,7 @@ export function WaitTimeTileContent() {
   if (!config) {
     return (
       <View style={styles.container}>
-        <Text style={styles.unconfigured}>Appuyer pour{"\n"}configurer</Text>
+        <Text style={styles.unconfigured}>{t('bricks.wait-time.tile.tapToConfigure')}</Text>
       </View>
     );
   }
@@ -47,7 +49,7 @@ export function WaitTimeTileContent() {
           <Text style={styles.nextMinutes}>
             {loading && !next ? "…" : next ? formatMinutes(next.minutes) : "--"}
           </Text>
-          <Text style={styles.nextLabel}>min</Text>
+          <Text style={styles.nextLabel}>{t('common.min')}</Text>
         </View>
 
         {following && (
@@ -55,7 +57,7 @@ export function WaitTimeTileContent() {
             <Text style={styles.followingMinutes}>
               {formatMinutes(following.minutes)}
             </Text>
-            <Text style={styles.followingLabel}>min</Text>
+            <Text style={styles.followingLabel}>{t('common.min')}</Text>
           </View>
         )}
       </View>

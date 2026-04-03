@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import { getNextDepartures } from "naolib-wait-time-js";
 import type { ArretStop } from "naolib-wait-time-js";
 import { colors} from "@/theme";
@@ -33,6 +34,7 @@ export function ChooseDirectionStep({
   onBack,
   onSelect,
 }: ChooseDirectionStepProps) {
+  const { t } = useTranslation();
   const [directions, setDirections] = useState<DirectionOption[]>([]);
   const [lineColor, setLineColor] = useState("#059669");
   const [loading, setLoading] = useState(true);
@@ -57,29 +59,29 @@ export function ChooseDirectionStep({
         setNullScheduleData(true);
         found.push({
           sens: 1,
-          terminusLabel: "Direction 1 (Aucun données pour cette ligne)",
+          terminusLabel: t('bricks.wait-time.setup.directionNoData', { n: 1 }),
           disabled: true,
         });
         found.push({
           sens: 2,
-          terminusLabel: "Direction 2 (Aucun données pour cette ligne)",
+          terminusLabel: t('bricks.wait-time.setup.directionNoData', { n: 2 }),
           disabled: true,
         });
       } else if (found.length === 1) {
         const other: 1 | 2 = found[0].sens === 1 ? 2 : 1;
-        found.push({ sens: other, terminusLabel: `Direction ${other}` });
+        found.push({ sens: other, terminusLabel: t('bricks.wait-time.setup.directionOther', { n: other }) });
       }
       setDirections(found.sort((a, b) => a.sens - b.sens));
       setLineColor(getLineColor(numLigne));
     } catch {
       setDirections([
-        { sens: 1, terminusLabel: "Direction 1" },
-        { sens: 2, terminusLabel: "Direction 2" },
+        { sens: 1, terminusLabel: t('bricks.wait-time.setup.direction1') },
+        { sens: 2, terminusLabel: t('bricks.wait-time.setup.direction2') },
       ]);
     } finally {
       setLoading(false);
     }
-  }, [stop.codeLieu, numLigne]);
+  }, [stop.codeLieu, numLigne, t]);
 
   useEffect(() => {
     loadDirections();
@@ -89,13 +91,13 @@ export function ChooseDirectionStep({
     <>
     <View>
       <TouchableOpacity onPress={onBack} style={styles.backRow}>
-        <Text style={styles.backLabel}>‹ Modifier la ligne</Text>
+        <Text style={styles.backLabel}>{t('bricks.wait-time.setup.editLine')}</Text>
       </TouchableOpacity>
 
       <Text style={styles.stepTitle}>
-        Ligne {numLigne} — {stop.libelle}
+        {t('bricks.wait-time.setup.lineTitle', { numLigne, stopLabel: stop.libelle })}
       </Text>
-      <Text style={styles.stepSubtitle}>{nullScheduleData ? "Aucun données pour cette ligne" : "Choisir une direction"}</Text>
+      <Text style={styles.stepSubtitle}>{nullScheduleData ? t('bricks.wait-time.setup.noData') : t('bricks.wait-time.setup.chooseDirection')}</Text>
 
       {loading ? (
         <View style={styles.centered}>
@@ -121,7 +123,7 @@ export function ChooseDirectionStep({
           {nullScheduleData ? (
         <View style={{padding: 40, ...styles.centered}}>
           <TouchableOpacity onPress={onBack}>
-            <Text>Modifier la ligne</Text>
+            <Text>{t('bricks.wait-time.setup.editLineButton')}</Text>
           </TouchableOpacity>
         </View>
       ) : null}

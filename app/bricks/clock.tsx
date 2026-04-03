@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { ScreenHeader, HeaderButton } from '@/components/ScreenHeader';
 import { useClockTime, formatNantesTime, formatNantesDate } from '@/bricks/clock/ClockContext';
 import { colors, spacing, typography } from '@/theme';
 
 export default function ClockScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const now = useClockTime();
   const { hours, minutes, seconds } = formatNantesTime(now);
@@ -14,8 +16,8 @@ export default function ClockScreen() {
   return (
     <View style={styles.screen}>
       <ScreenHeader
-        title="Heure à Nantes"
-        leftAction={<HeaderButton label="‹ Retour" onPress={() => router.back()} variant="back" />}
+        title={t('bricks.clock.screen.title')}
+        leftAction={<HeaderButton label={t('common.back')} onPress={() => router.back()} variant="back" />}
       />
       <View style={styles.content}>
         <Text style={styles.hhmm}>

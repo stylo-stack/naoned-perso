@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors, spacing, typography } from '@/theme';
 
 interface Props {
@@ -7,13 +8,14 @@ interface Props {
 }
 
 export function EmptyDashboard({ onAdd }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <Text style={styles.emoji}>✦</Text>
-      <Text style={styles.title}>Votre tableau de bord est vide</Text>
-      <Text style={styles.subtitle}>Ajoutez des tuiles pour personnaliser votre expérience.</Text>
+      <Text style={styles.title}>{t('dashboard.empty.title')}</Text>
+      <Text style={styles.subtitle}>{t('dashboard.empty.subtitle')}</Text>
       <TouchableOpacity style={styles.button} onPress={onAdd} activeOpacity={0.8}>
-        <Text style={styles.buttonLabel}>+ Ajouter des tuiles</Text>
+        <Text style={styles.buttonLabel}>{t('dashboard.empty.addButton')}</Text>
       </TouchableOpacity>
     </View>
   );

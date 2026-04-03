@@ -4,8 +4,8 @@ export type BrickId = string;
 
 export interface BrickDefinition {
   id: BrickId;
-  label: string;
-  description: string;
+  labelKey: string;
+  descriptionKey: string;
   icon: string;
   accentColor: string;
   route: string;

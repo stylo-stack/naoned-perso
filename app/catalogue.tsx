@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { BRICK_REGISTRY } from '@/bricks/registry';
 import { BrickDefinition } from '@/bricks/types';
@@ -10,6 +11,7 @@ import { useDashboardContext } from '@/context/DashboardContext';
 import { colors, spacing } from '@/theme';
 
 export default function CatalogueScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { bricks, addBrick } = useDashboardContext();
 
@@ -34,8 +36,8 @@ export default function CatalogueScreen() {
   return (
     <View style={styles.screen}>
       <ScreenHeader
-        title="Ajouter une tuile"
-        rightAction={<HeaderButton label="Fermer" onPress={() => router.back()} />}
+        title={t('catalogue.title')}
+        rightAction={<HeaderButton label={t('common.close')} onPress={() => router.back()} />}
       />
       <FlatList
         data={BRICK_REGISTRY}

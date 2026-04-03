@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { BrickDefinition, BrickInstance } from '@/bricks/types';
 import { spacing } from '@/theme';
 
@@ -22,10 +23,7 @@ export function BrickTile({ definition, onPress }: Props) {
       {definition.TileContent ? (
         <definition.TileContent />
       ) : (
-        <>
-          <Text style={styles.icon}>{definition.icon}</Text>
-          <Text style={styles.label}>{definition.label}</Text>
-        </>
+        <FallbackContent definition={definition} />
       )}
     </TileShell>
   );
@@ -42,12 +40,19 @@ function DynamicColorTile({
       {definition.TileContent ? (
         <definition.TileContent />
       ) : (
-        <>
-          <Text style={styles.icon}>{definition.icon}</Text>
-          <Text style={styles.label}>{definition.label}</Text>
-        </>
+        <FallbackContent definition={definition} />
       )}
     </TileShell>
+  );
+}
+
+function FallbackContent({ definition }: { definition: BrickDefinition }) {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Text style={styles.icon}>{definition.icon}</Text>
+      <Text style={styles.label}>{t(definition.labelKey)}</Text>
+    </>
   );
 }
 

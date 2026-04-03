@@ -1,3 +1,4 @@
+import i18n from '@/i18n';
 import React, {
   createContext,
   useCallback,
@@ -149,7 +150,7 @@ export function WaitTimeProvider({
       setDepartures(results.map(toDeperture));
       setError(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Erreur inconnue");
+      setError(e instanceof Error ? e.message : i18n.t('errors.unknown'));
     } finally {
       setLoading(false);
       setLastFetchTimestamp(Date.now());

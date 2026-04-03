@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { BrickDefinition } from '@/bricks/types';
 import { colors, spacing, typography } from '@/theme';
 
@@ -10,15 +11,16 @@ interface Props {
 }
 
 export function CatalogueTile({ definition, isEnabled, onAdd }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <View style={[styles.iconContainer, { backgroundColor: definition.accentColor }]}>
         <Text style={styles.icon}>{definition.icon}</Text>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.label}>{definition.label}</Text>
+        <Text style={styles.label}>{t(definition.labelKey)}</Text>
         <Text style={styles.description} numberOfLines={2}>
-          {definition.description}
+          {t(definition.descriptionKey)}
         </Text>
       </View>
       <TouchableOpacity

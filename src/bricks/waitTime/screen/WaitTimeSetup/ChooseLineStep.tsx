@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import type { ArretStop } from "naolib-wait-time-js";
 import { getLineColor } from "../../utils/lineColors";
 import { styles } from "./styles";
@@ -21,14 +22,15 @@ export function ChooseLineStep({
   onBack,
   onSelect,
 }: ChooseDirectionStepProps) {
+  const { t } = useTranslation();
   return (
     <View style={{marginBottom: 200}}>
       <TouchableOpacity onPress={onBack} style={styles.backRow}>
-        <Text style={styles.backLabel}>‹ Modifier l'arrêt</Text>
+        <Text style={styles.backLabel}>{t('bricks.wait-time.setup.editStop')}</Text>
       </TouchableOpacity>
 
       <Text style={styles.stepTitle}>{stop.libelle}</Text>
-      <Text style={styles.stepSubtitle}>Choisir une ligne</Text>
+      <Text style={styles.stepSubtitle}>{t('bricks.wait-time.setup.chooseLine')}</Text>
 
       <FlatList
         data={stop.ligne}
