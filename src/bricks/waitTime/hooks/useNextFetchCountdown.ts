@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useWaitTime, INTERVAL_LENGTH } from "./WaitTimeContext";
+import { useWaitTime, INTERVAL_LENGTH } from "../WaitTimeContext";
 
 export function useNextFetchCountdown() {
   const { lastFetchTimestamp } = useWaitTime();

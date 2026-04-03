@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useClockTime, formatNantesTime } from './ClockContext';
+import { useClockTime, formatNantesTime } from '../ClockContext';
 
 export function ClockTileContent() {
   const now = useClockTime();

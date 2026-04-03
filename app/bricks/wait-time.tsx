@@ -10,10 +10,10 @@ import { useRouter } from "expo-router";
 import { ScreenHeader, HeaderButton } from "@/components/ScreenHeader";
 import { colors, spacing, typography } from "@/theme";
 import { useWaitTime, formatMinutes } from "@/bricks/waitTime/WaitTimeContext";
-import { WaitTimeSetup } from "@/bricks/waitTime/WaitTimeSetup";
+import { WaitTimeSetup } from "@/bricks/waitTime/screen/WaitTimeSetup/WaitTimeSetup";
 import type { WaitTimeConfig } from "@/bricks/waitTime/WaitTimeContext";
 import { NextRefreshCountdown } from "@/components/NextRefreshCountdown";
-import { useNextFetchCountdown } from "@/bricks/waitTime/useNextFetchCountdown";
+import { useNextFetchCountdown } from "@/bricks/waitTime/hooks/useNextFetchCountdown";
 
 export default function WaitTimeScreen() {
   const router = useRouter();

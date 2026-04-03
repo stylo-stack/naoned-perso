@@ -1,8 +1,8 @@
 import { BrickDefinition, BrickId, BrickInstance } from './types';
 import { ClockProvider } from './clock/ClockContext';
-import { ClockTileContent } from './clock/ClockTileContent';
+import { ClockTileContent } from './clock/tile/ClockTileContent';
 import { WaitTimeProvider, useWaitTimeAccentColor } from './waitTime/WaitTimeContext';
-import { WaitTimeTileContent } from './waitTime/WaitTimeTileContent';
+import { WaitTimeTileContent } from './waitTime/tile/WaitTimeTileContent';
 
 export const BRICK_REGISTRY: BrickDefinition[] = [
   {

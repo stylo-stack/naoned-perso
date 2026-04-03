@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { Animated, StyleSheet, Text, View } from "react-native";
-import { useWaitTime, formatMinutes } from "./WaitTimeContext";
-import { useNextFetchCountdown } from "./useNextFetchCountdown";
-import { colors } from "@/theme";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { useWaitTime, formatMinutes } from "../WaitTimeContext";
 import { NextRefreshCountdown } from "@/components/NextRefreshCountdown";
+import { useNextFetchCountdown } from "../hooks/useNextFetchCountdown";
 
 
 
