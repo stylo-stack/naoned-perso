@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useClockTime, formatNantesTime } from '../ClockContext';
 import { useTranslation } from 'react-i18next';
+import { useNow } from '../hooks/useNow';
 
 export function ClockTileContent() {
-  const now = useClockTime();
+  const {formattedTime: { hours, minutes }} = useNow();
   const {t} = useTranslation()
-  const { hours, minutes } = formatNantesTime(now);
 
   return (
     <View style={styles.container}>

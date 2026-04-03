@@ -1,5 +1,4 @@
 import { BrickDefinition, BrickId, BrickInstance } from "./types";
-import { ClockProvider } from "./clock/ClockContext";
 import { ClockTileContent } from "./clock/tile/ClockTileContent";
 import {
   WaitTimeProvider,
@@ -29,7 +28,6 @@ export const BRICK_REGISTRY: BrickDefinition[] = [
     accentColor: "#1E293B",
     route: "/bricks/clock",
     defaultEnabled: false,
-    Provider: ClockProvider,
     TileContent: ClockTileContent,
   },
 ];

@@ -8,7 +8,8 @@ export default {
     configure: 'Configure',
     min: 'min',
     realtime: 'Real-time',
-    nantes: 'Nantes'
+    nantes: 'Nantes',
+    europeParis: 'Europe/Paris'
   },
   dashboard: {
     addTile: '+ Add a tile',

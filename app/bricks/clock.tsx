@@ -3,15 +3,15 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenHeader, HeaderButton } from '@/components/ScreenHeader';
-import { useClockTime, formatNantesTime, formatNantesDate } from '@/bricks/clock/ClockContext';
 import { colors, spacing, typography } from '@/theme';
+import { useLanguage } from '@/context/LanguageContext';
+import { useNow } from '@/bricks/clock/hooks/useNow';
 
 export default function ClockScreen() {
+  const {language} = useLanguage()
   const { t } = useTranslation();
   const router = useRouter();
-  const now = useClockTime();
-  const { hours, minutes, seconds } = formatNantesTime(now);
-  const date = formatNantesDate(now);
+  const {formattedTime: { hours, minutes, seconds }, formattedDate} = useNow();
 
   return (
     <View style={styles.screen}>
@@ -24,8 +24,8 @@ export default function ClockScreen() {
           {hours}:{minutes}
         </Text>
         <Text style={styles.seconds}>:{seconds}</Text>
-        <Text style={styles.date}>{date}</Text>
-        <Text style={styles.tz}>Europe/Paris</Text>
+        <Text style={styles.date}>{formattedDate}</Text>
+        <Text style={styles.tz}>{t("common.europeParis")}</Text>
       </View>
     </View>
   );

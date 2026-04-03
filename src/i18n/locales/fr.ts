@@ -9,6 +9,7 @@ export default {
     min: "min",
     realtime: "Temps réel",
     nantes: "Nantes",
+    europeParis: "Europe/Paris",
   },
   dashboard: {
     addTile: "+ Ajouter une tuile",
