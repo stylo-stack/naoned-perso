@@ -30,26 +30,31 @@ export default function DashboardScreen() {
     const definition = getBrickById(item.id);
     if (!definition) return null;
 
-    if (isEditMode) {
-      return (
-        <BrickTileEdit
-          definition={definition}
-          drag={drag}
-          isActive={isActive}
-          onRemove={() => {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-            removeBrick(item.id);
-          }}
-        />
-      );
-    }
-
-    return (
+    const content = isEditMode ? (
+      <BrickTileEdit
+        definition={definition}
+        drag={drag}
+        isActive={isActive}
+        onRemove={() => {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          removeBrick(item.instanceId);
+        }}
+      />
+    ) : (
       <BrickTile
         definition={definition}
-        onPress={() => router.push(definition.route as never)}
+        instance={item}
+        onPress={() =>
+          router.push(`${definition.route}?instanceId=${item.instanceId}` as never)
+        }
       />
     );
+
+    if (definition.Provider) {
+      const Provider = definition.Provider;
+      return <Provider instanceId={item.instanceId}>{content}</Provider>;
+    }
+    return content;
   }
 
   if (isLoading) {
@@ -78,7 +83,7 @@ export default function DashboardScreen() {
       ) : (
         <DraggableFlatList
           data={bricks}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.instanceId}
           onDragEnd={({ data }) => onDragEnd(data)}
           renderItem={renderItem}
           numColumns={2}

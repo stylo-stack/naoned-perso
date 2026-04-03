@@ -1,3 +1,4 @@
+import React from 'react';
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -18,9 +19,8 @@ export default function RootLayout() {
               name="catalogue"
               options={{ presentation: 'modal' }}
             />
-            <Stack.Screen name="bricks/naolib" />
-            <Stack.Screen name="bricks/weather" />
-            <Stack.Screen name="bricks/agenda" />
+            <Stack.Screen name="bricks/clock" />
+            <Stack.Screen name="bricks/wait-time" />
           </Stack>
         </DashboardContext.Provider>
       </SafeAreaProvider>

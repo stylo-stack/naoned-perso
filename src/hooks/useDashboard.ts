@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrickId, BrickInstance } from '@/bricks/types';
+import { BrickId, BrickInstance } from '@/bricks/types'; // BrickId still used by handleAddBrick
 import {
   addBrick,
   loadDashboard,
@@ -30,8 +30,8 @@ export function useDashboard() {
     await saveDashboard(updated);
   }
 
-  async function handleRemoveBrick(id: BrickId) {
-    const updated = removeBrick(bricks, id);
+  async function handleRemoveBrick(instanceId: string) {
+    const updated = removeBrick(bricks, instanceId);
     setBricks(updated);
     await saveDashboard(updated);
   }

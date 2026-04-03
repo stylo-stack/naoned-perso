@@ -25,7 +25,7 @@ export default function CatalogueScreen() {
     return (
       <CatalogueTile
         definition={item}
-        isEnabled={enabledIds.has(item.id)}
+        isEnabled={enabledIds.has(item.id) && !item.allowMultiple}
         onAdd={() => handleAdd(item.id)}
       />
     );

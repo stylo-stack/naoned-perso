@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
-import { BrickDefinition } from '@/bricks/types';
+import { BrickDefinition, BrickInstance } from '@/bricks/types';
 import { spacing } from '@/theme';
 
 interface Props {
   definition: BrickDefinition;
+  instance: BrickInstance;
   onPress: () => void;
 }
 
@@ -12,14 +13,62 @@ export function BrickTile({ definition, onPress }: Props) {
   const { width: screenWidth } = useWindowDimensions();
   const tileSize = (screenWidth - spacing.base * 2 - spacing.sm) / 2;
 
+  if (definition.useAccentColor) {
+    return <DynamicColorTile definition={definition} onPress={onPress} tileSize={tileSize} />;
+  }
+
+  return (
+    <TileShell color={definition.accentColor} tileSize={tileSize} onPress={onPress}>
+      {definition.TileContent ? (
+        <definition.TileContent />
+      ) : (
+        <>
+          <Text style={styles.icon}>{definition.icon}</Text>
+          <Text style={styles.label}>{definition.label}</Text>
+        </>
+      )}
+    </TileShell>
+  );
+}
+
+function DynamicColorTile({
+  definition,
+  onPress,
+  tileSize,
+}: Omit<Props, 'instance'> & { tileSize: number; }) {
+  const color = definition.useAccentColor!();
+  return (
+    <TileShell color={color} tileSize={tileSize} onPress={onPress}>
+      {definition.TileContent ? (
+        <definition.TileContent />
+      ) : (
+        <>
+          <Text style={styles.icon}>{definition.icon}</Text>
+          <Text style={styles.label}>{definition.label}</Text>
+        </>
+      )}
+    </TileShell>
+  );
+}
+
+function TileShell({
+  color,
+  tileSize,
+  onPress,
+  children,
+}: {
+  color: string;
+  tileSize: number;
+  onPress: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <TouchableOpacity
-      style={[styles.container, { width: tileSize, height: tileSize, backgroundColor: definition.accentColor }]}
+      style={[styles.container, { width: tileSize, height: tileSize, backgroundColor: color }]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Text style={styles.icon}>{definition.icon}</Text>
-      <Text style={styles.label}>{definition.label}</Text>
+      {children}
     </TouchableOpacity>
   );
 }
