@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -7,25 +7,26 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { getNextDepartures, getStops } from 'naolib-wait-time-js';
-import type { ArretStop } from 'naolib-wait-time-js';
-import { colors, spacing, typography } from '@/theme';
-import { getLineColor } from './lineColors';
-import type { WaitTimeConfig } from './WaitTimeContext';
+} from "react-native";
+import { getNextDepartures, getStops } from "naolib-wait-time-js";
+import type { ArretStop } from "naolib-wait-time-js";
+import { colors, spacing, typography } from "@/theme";
+import { getLineColor } from "./lineColors";
+import type { WaitTimeConfig } from "./WaitTimeContext";
 
 type Props = {
   onDone: (config: WaitTimeConfig) => void;
 };
 
 type Step =
-  | { type: 'stop' }
-  | { type: 'line'; stop: ArretStop }
-  | { type: 'direction'; stop: ArretStop; numLigne: string };
+  | { type: "stop" }
+  | { type: "line"; stop: ArretStop }
+  | { type: "direction"; stop: ArretStop; numLigne: string };
 
 type DirectionOption = {
   sens: 1 | 2;
   terminusLabel: string;
+  disabled?: boolean;
 };
 
 let stopsCache: ArretStop[] | null = null;
@@ -38,21 +39,21 @@ async function getAllStops(): Promise<ArretStop[]> {
 }
 
 export function WaitTimeSetup({ onDone }: Props) {
-  const [step, setStep] = useState<Step>({ type: 'stop' });
+  const [step, setStep] = useState<Step>({ type: "stop" });
 
-  if (step.type === 'stop') {
+  if (step.type === "stop") {
     return (
-      <StopSearchStep
-        onSelect={(stop) => setStep({ type: 'line', stop })}
-      />
+      <StopSearchStep onSelect={(stop) => setStep({ type: "line", stop })} />
     );
   }
-  if (step.type === 'line') {
+  if (step.type === "line") {
     return (
       <LinePickStep
         stop={step.stop}
-        onBack={() => setStep({ type: 'stop' })}
-        onSelect={(numLigne) => setStep({ type: 'direction', stop: step.stop, numLigne })}
+        onBack={() => setStep({ type: "stop" })}
+        onSelect={(numLigne) =>
+          setStep({ type: "direction", stop: step.stop, numLigne })
+        }
       />
     );
   }
@@ -60,7 +61,7 @@ export function WaitTimeSetup({ onDone }: Props) {
     <DirectionPickStep
       stop={step.stop}
       numLigne={step?.numLigne}
-      onBack={() => setStep({ type: 'line', stop: step.stop })}
+      onBack={() => setStep({ type: "line", stop: step.stop })}
       onSelect={(sens, terminusLabel, lineColor) =>
         onDone({
           codeLieu: step.stop.codeLieu,
@@ -78,7 +79,7 @@ export function WaitTimeSetup({ onDone }: Props) {
 // ─── Step 1: search stop ─────────────────────────────────────────────────────
 
 function StopSearchStep({ onSelect }: { onSelect: (stop: ArretStop) => void }) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [allStops, setAllStops] = useState<ArretStop[]>([]);
   const [fetchingStops, setFetchingStops] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -90,14 +91,15 @@ function StopSearchStep({ onSelect }: { onSelect: (stop: ArretStop) => void }) {
       .finally(() => setFetchingStops(false));
   }, []);
 
-  const results = query.length >= 2
-    ? allStops
-        .filter((s) => s.libelle.toLowerCase().includes(query.toLowerCase()))
-        .slice(0, 20)
-    : [];
+  const results =
+    query.length >= 2
+      ? allStops
+          .filter((s) => s.libelle.toLowerCase().includes(query.toLowerCase()))
+          .slice(0, 20)
+      : [];
 
   return (
-    <View style={styles.stepContainer}>
+    <View>
       <Text style={styles.stepTitle}>Choisir un arrêt</Text>
 
       <TextInput
@@ -123,7 +125,9 @@ function StopSearchStep({ onSelect }: { onSelect: (stop: ArretStop) => void }) {
       )}
 
       {!fetchingStops && query.length < 2 && (
-        <Text style={styles.hint}>Tapez au moins 2 caractères pour rechercher.</Text>
+        <Text style={styles.hint}>
+          Tapez au moins 2 caractères pour rechercher.
+        </Text>
       )}
 
       <FlatList
@@ -131,9 +135,14 @@ function StopSearchStep({ onSelect }: { onSelect: (stop: ArretStop) => void }) {
         keyExtractor={(item) => item.codeLieu}
         keyboardShouldPersistTaps="handled"
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.listItem} onPress={() => onSelect(item)}>
+          <TouchableOpacity
+            style={styles.listItem}
+            onPress={() => onSelect(item)}
+          >
             <Text style={styles.listItemLabel}>{item.libelle}</Text>
-            <Text style={styles.listItemSub}>{item.ligne.map((l) => l.numLigne).join(' · ')}</Text>
+            <Text style={styles.listItemSub} numberOfLines={1}>
+              {item.ligne.map((l) => l.numLigne).join(" · ")}
+            </Text>
           </TouchableOpacity>
         )}
       />
@@ -153,7 +162,7 @@ function LinePickStep({
   onSelect: (numLigne: string) => void;
 }) {
   return (
-    <View style={styles.stepContainer}>
+    <View style={{marginBottom: 200}}>
       <TouchableOpacity onPress={onBack} style={styles.backRow}>
         <Text style={styles.backLabel}>‹ Modifier l'arrêt</Text>
       </TouchableOpacity>
@@ -165,8 +174,16 @@ function LinePickStep({
         data={stop.ligne}
         keyExtractor={(item) => item.numLigne}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.listItem} onPress={() => onSelect(item.numLigne)}>
-            <View style={[styles.lineBadge, {backgroundColor: getLineColor(item.numLigne)}]}>
+          <TouchableOpacity
+            style={styles.listItem}
+            onPress={() => onSelect(item.numLigne)}
+          >
+            <View
+              style={[
+                styles.lineBadge,
+                { backgroundColor: getLineColor(item.numLigne) },
+              ]}
+            >
               <Text style={styles.lineBadgeText}>{item.numLigne}</Text>
             </View>
           </TouchableOpacity>
@@ -190,13 +207,17 @@ function DirectionPickStep({
   onSelect: (sens: 1 | 2, terminusLabel: string, lineColor: string) => void;
 }) {
   const [directions, setDirections] = useState<DirectionOption[]>([]);
-  const [lineColor, setLineColor] = useState('#059669');
+  const [lineColor, setLineColor] = useState("#059669");
   const [loading, setLoading] = useState(true);
+  const [nullScheduleData, setNullScheduleData] = useState(false);
 
   const loadDirections = useCallback(async () => {
     setLoading(true);
     try {
-      const results = await getNextDepartures(stop.codeLieu, { line: numLigne, limit: 10 });
+      const results = await getNextDepartures(stop.codeLieu, {
+        line: numLigne,
+        limit: 10,
+      });
       const seen = new Map<number, string>();
       for (const r of results) {
         if (!seen.has(r.sens)) seen.set(r.sens, r.terminus);
@@ -206,8 +227,17 @@ function DirectionPickStep({
       if (seen.has(2)) found.push({ sens: 2, terminusLabel: seen.get(2)! });
       // If no live data, offer both directions unlabelled
       if (found.length === 0) {
-        found.push({ sens: 1, terminusLabel: 'Direction 1' });
-        found.push({ sens: 2, terminusLabel: 'Direction 2' });
+        setNullScheduleData(true);
+        found.push({
+          sens: 1,
+          terminusLabel: "Direction 1 (Aucun données pour cette ligne)",
+          disabled: true,
+        });
+        found.push({
+          sens: 2,
+          terminusLabel: "Direction 2 (Aucun données pour cette ligne)",
+          disabled: true,
+        });
       } else if (found.length === 1) {
         const other: 1 | 2 = found[0].sens === 1 ? 2 : 1;
         found.push({ sens: other, terminusLabel: `Direction ${other}` });
@@ -216,24 +246,29 @@ function DirectionPickStep({
       setLineColor(getLineColor(numLigne));
     } catch {
       setDirections([
-        { sens: 1, terminusLabel: 'Direction 1' },
-        { sens: 2, terminusLabel: 'Direction 2' },
+        { sens: 1, terminusLabel: "Direction 1" },
+        { sens: 2, terminusLabel: "Direction 2" },
       ]);
     } finally {
       setLoading(false);
     }
   }, [stop.codeLieu, numLigne]);
 
-  useEffect(() => { loadDirections(); }, [loadDirections]);
+  useEffect(() => {
+    loadDirections();
+  }, [loadDirections]);
 
   return (
-    <View style={styles.stepContainer}>
+    <>
+    <View>
       <TouchableOpacity onPress={onBack} style={styles.backRow}>
         <Text style={styles.backLabel}>‹ Modifier la ligne</Text>
       </TouchableOpacity>
 
-      <Text style={styles.stepTitle}>Ligne {numLigne} — {stop.libelle}</Text>
-      <Text style={styles.stepSubtitle}>Choisir une direction</Text>
+      <Text style={styles.stepTitle}>
+        Ligne {numLigne} — {stop.libelle}
+      </Text>
+      <Text style={styles.stepSubtitle}>{nullScheduleData ? "Aucun données pour cette ligne" : "Choisir une direction"}</Text>
 
       {loading ? (
         <View style={styles.centered}>
@@ -246,6 +281,7 @@ function DirectionPickStep({
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.listItem}
+              disabled={item.disabled}
               onPress={() => onSelect(item.sens, item.terminusLabel, lineColor)}
             >
               <Text style={[styles.listItemLabel]}>→ {item.terminusLabel}</Text>
@@ -253,16 +289,22 @@ function DirectionPickStep({
           )}
         />
       )}
+
     </View>
+          {nullScheduleData ? (
+        <View style={{padding: 40, ...styles.centered}}>
+          <TouchableOpacity onPress={onBack}>
+            <Text>Modifier la ligne</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+      </>
   );
 }
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
-  stepContainer: {
-    flex: 1,
-  },
   stepTitle: {
     ...typography.subheading,
     color: colors.textPrimary,
@@ -299,18 +341,18 @@ const styles = StyleSheet.create({
   hint: {
     ...typography.caption,
     color: colors.textDisabled,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: spacing.lg,
     marginHorizontal: spacing.base,
   },
   centered: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: spacing.lg,
     gap: spacing.sm,
   },
   listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: spacing.base,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
@@ -325,6 +367,7 @@ const styles = StyleSheet.create({
   listItemSub: {
     ...typography.caption,
     color: colors.textSecondary,
+    flex: 1,
   },
   lineBadge: {
     backgroundColor: colors.accent,
@@ -334,7 +377,7 @@ const styles = StyleSheet.create({
   },
   lineBadgeText: {
     fontSize: 15,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
   },
 });

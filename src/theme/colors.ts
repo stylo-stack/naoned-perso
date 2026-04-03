@@ -9,4 +9,6 @@ export const colors = {
   accent: '#2563EB',
   danger: '#EF4444',
   white: '#FFFFFF',
+  loading: '#8196be',
+  preloading: '#8196be84',
 } as const;

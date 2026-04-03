@@ -1,16 +1,24 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useWaitTime, formatMinutes } from './WaitTimeContext';
+import React, { useEffect, useRef } from "react";
+import { Animated, StyleSheet, Text, View } from "react-native";
+import { useWaitTime, formatMinutes } from "./WaitTimeContext";
+import { useNextFetchCountdown } from "./useNextFetchCountdown";
+import { colors } from "@/theme";
+import { NextRefreshCountdown } from "@/components/NextRefreshCountdown";
+
+
 
 export function WaitTimeTileContent() {
-  const { config, configLoading, departures, loading } = useWaitTime();
+  const { config, configLoading, departures, loading} =
+    useWaitTime();
+
+    const {percent} = useNextFetchCountdown();
 
   if (configLoading) return null;
 
   if (!config) {
     return (
       <View style={styles.container}>
-        <Text style={styles.unconfigured}>Appuyer pour{'\n'}configurer</Text>
+        <Text style={styles.unconfigured}>Appuyer pour{"\n"}configurer</Text>
       </View>
     );
   }
@@ -38,37 +46,40 @@ export function WaitTimeTileContent() {
       <View style={styles.times}>
         <View style={styles.nextBlock}>
           <Text style={styles.nextMinutes}>
-            {loading && !next ? '…' : next ? formatMinutes(next.minutes) : '--'}
+            {loading && !next ? "…" : next ? formatMinutes(next.minutes) : "--"}
           </Text>
           <Text style={styles.nextLabel}>min</Text>
         </View>
 
         {following && (
           <View style={styles.followingBlock}>
-            <Text style={styles.followingMinutes}>{formatMinutes(following.minutes)}</Text>
+            <Text style={styles.followingMinutes}>
+              {formatMinutes(following.minutes)}
+            </Text>
             <Text style={styles.followingLabel}>min</Text>
           </View>
         )}
       </View>
+      <NextRefreshCountdown percent={percent}/>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
     gap: 4,
   },
   unconfigured: {
     fontSize: 13,
-    fontWeight: '500',
-    color: 'rgba(255,255,255,0.7)',
-    textAlign: 'center',
+    fontWeight: "500",
+    color: "rgba(255,255,255,0.7)",
+    textAlign: "center",
     lineHeight: 18,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
   lineBadge: {
@@ -78,59 +89,59 @@ const styles = StyleSheet.create({
   },
   lineText: {
     fontSize: 11,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
     letterSpacing: 0.3,
   },
   stopName: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#fff',
+    fontWeight: "600",
+    color: "#fff",
     flex: 1,
   },
   direction: {
     fontSize: 11,
-    color: 'rgba(255,255,255,0.75)',
-    fontWeight: '500',
+    color: "rgba(255,255,255,0.75)",
+    fontWeight: "500",
   },
   times: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    flexDirection: "row",
+    alignItems: "flex-end",
     gap: 10,
     marginTop: 2,
   },
   nextBlock: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    flexDirection: "row",
+    alignItems: "flex-end",
     gap: 2,
   },
   nextMinutes: {
     fontSize: 40,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
     lineHeight: 44,
   },
   nextLabel: {
     fontSize: 13,
-    fontWeight: '500',
-    color: 'rgba(255,255,255,0.7)',
+    fontWeight: "500",
+    color: "rgba(255,255,255,0.7)",
     marginBottom: 4,
   },
   followingBlock: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    flexDirection: "row",
+    alignItems: "flex-end",
     gap: 2,
     marginBottom: 2,
   },
   followingMinutes: {
     fontSize: 22,
-    fontWeight: '600',
-    color: 'rgba(255,255,255,0.65)',
+    fontWeight: "600",
+    color: "rgba(255,255,255,0.65)",
     lineHeight: 26,
   },
   followingLabel: {
     fontSize: 11,
-    color: 'rgba(255,255,255,0.5)',
+    color: "rgba(255,255,255,0.5)",
     marginBottom: 2,
   },
 });

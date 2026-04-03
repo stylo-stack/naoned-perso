@@ -29,6 +29,7 @@ type WaitTimeContextValue = {
   loading: boolean;
   error: string | null;
   refresh: () => void;
+  lastFetchTimestamp?: number;
 };
 
 const WaitTimeContext = createContext<WaitTimeContextValue>({
@@ -50,12 +51,15 @@ function toDeperture(wt: WaitTime): Departure {
   };
 }
 
+export const INTERVAL_LENGTH = 60000;
+
 export function WaitTimeProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfigState] = useState<WaitTimeConfig | null>(null);
   const [configLoading, setConfigLoading] = useState(true);
   const [departures, setDepartures] = useState<Departure[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastFetchTimestamp, setLastFetchTimestamp] = useState<number>();
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
@@ -90,6 +94,7 @@ export function WaitTimeProvider({ children }: { children: React.ReactNode }) {
       setError(e instanceof Error ? e.message : 'Erreur inconnue');
     } finally {
       setLoading(false);
+      setLastFetchTimestamp(Date.now())
     }
   }, [config]);
 
@@ -100,9 +105,19 @@ export function WaitTimeProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [config, fetchDepartures]);
 
+  useEffect(()=>{
+    const interval = setInterval(()=> {
+      fetchDepartures()
+    }, INTERVAL_LENGTH)
+
+    return () => {
+      clearInterval(interval)
+    }
+  },[fetchDepartures])
+
   return (
     <WaitTimeContext.Provider
-      value={{ config, configLoading, setConfig, departures, loading, error, refresh: fetchDepartures }}
+      value={{ config, configLoading, setConfig, departures, loading, error, refresh: fetchDepartures, lastFetchTimestamp }}
     >
       {children}
     </WaitTimeContext.Provider>
