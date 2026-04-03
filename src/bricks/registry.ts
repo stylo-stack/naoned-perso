@@ -1,4 +1,6 @@
 import { BrickDefinition, BrickId, BrickInstance } from './types';
+import { ClockProvider } from './clock/ClockContext';
+import { ClockTileContent } from './clock/ClockTileContent';
 
 export const BRICK_REGISTRY: BrickDefinition[] = [
   {
@@ -27,6 +29,17 @@ export const BRICK_REGISTRY: BrickDefinition[] = [
     accentColor: '#7C3AED',
     route: '/bricks/agenda',
     defaultEnabled: true,
+  },
+  {
+    id: 'clock',
+    label: 'Heure à Nantes',
+    description: "L'heure actuelle à Nantes.",
+    icon: '🕐',
+    accentColor: '#1E293B',
+    route: '/bricks/clock',
+    defaultEnabled: false,
+    Provider: ClockProvider,
+    TileContent: ClockTileContent,
   },
 ];
 

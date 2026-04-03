@@ -18,8 +18,14 @@ export function BrickTile({ definition, onPress }: Props) {
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Text style={styles.icon}>{definition.icon}</Text>
-      <Text style={styles.label}>{definition.label}</Text>
+      {definition.TileContent ? (
+        <definition.TileContent />
+      ) : (
+        <>
+          <Text style={styles.icon}>{definition.icon}</Text>
+          <Text style={styles.label}>{definition.label}</Text>
+        </>
+      )}
     </TouchableOpacity>
   );
 }
