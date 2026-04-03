@@ -6,16 +6,20 @@ import {
   Text,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { ScreenHeader, HeaderButton } from "@/components/ScreenHeader";
 import { colors, spacing, typography } from "@/theme";
-import { useWaitTime, formatMinutes } from "@/bricks/waitTime/WaitTimeContext";
+import {
+  useWaitTime,
+  formatMinutes,
+  WaitTimeProvider,
+} from "@/bricks/waitTime/WaitTimeContext";
 import { WaitTimeSetup } from "@/bricks/waitTime/screen/WaitTimeSetup/WaitTimeSetup";
 import type { WaitTimeConfig } from "@/bricks/waitTime/WaitTimeContext";
 import { NextRefreshCountdown } from "@/components/NextRefreshCountdown";
 import { useNextFetchCountdown } from "@/bricks/waitTime/hooks/useNextFetchCountdown";
 
-export default function WaitTimeScreen() {
+function WaitTimeScreen() {
   const router = useRouter();
   const {
     config,
@@ -167,6 +171,15 @@ export default function WaitTimeScreen() {
   );
 }
 
+export default function WaitTimeScreenWrapper() {
+  const { instanceId } = useLocalSearchParams<{ instanceId: string }>();
+  return (
+    <WaitTimeProvider instanceId={instanceId ?? "default"}>
+      <WaitTimeScreen />
+    </WaitTimeProvider>
+  );
+}
+
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.base, gap: spacing.sm },
@@ -185,15 +198,6 @@ const styles = StyleSheet.create({
   metaText: {
     ...typography.caption,
     color: colors.textSecondary,
-  },
-  refreshButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-  },
-  refreshText: {
-    ...typography.caption,
-    color: colors.accent,
-    fontWeight: "600",
   },
   emptyText: {
     ...typography.body,

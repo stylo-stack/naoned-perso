@@ -7,7 +7,7 @@ export interface DashboardContextValue {
   isEditMode: boolean;
   toggleEditMode: (value?: boolean) => void;
   addBrick: (id: BrickId) => Promise<void>;
-  removeBrick: (id: BrickId) => Promise<void>;
+  removeBrick: (instanceId: string) => Promise<void>;
   onDragEnd: (data: BrickInstance[]) => Promise<void>;
 }
 

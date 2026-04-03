@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ClockContext = createContext<Date>(new Date());
 
-export function ClockProvider({ children }: { children: React.ReactNode }) {
+export function ClockProvider({ children }: { children: React.ReactNode; instanceId?: string }) {
   const [now, setNow] = useState(new Date());
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);

@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
-import { BrickDefinition } from '@/bricks/types';
+import { BrickDefinition, BrickInstance } from '@/bricks/types';
 import { spacing } from '@/theme';
 
 interface Props {
   definition: BrickDefinition;
+  instance: BrickInstance;
   onPress: () => void;
 }
 
@@ -13,14 +14,7 @@ export function BrickTile({ definition, onPress }: Props) {
   const tileSize = (screenWidth - spacing.base * 2 - spacing.sm) / 2;
 
   if (definition.useAccentColor) {
-    return (
-      <DynamicColorTile
-        definition={definition}
-        onPress={onPress}
-        tileSize={tileSize}
-        useAccentColor={definition.useAccentColor}
-      />
-    );
+    return <DynamicColorTile definition={definition} onPress={onPress} tileSize={tileSize} />;
   }
 
   return (
@@ -41,9 +35,8 @@ function DynamicColorTile({
   definition,
   onPress,
   tileSize,
-  useAccentColor,
-}: Props & { tileSize: number; useAccentColor: () => string }) {
-  const color = useAccentColor();
+}: Omit<Props, 'instance'> & { tileSize: number; }) {
+  const color = definition.useAccentColor!();
   return (
     <TileShell color={color} tileSize={tileSize} onPress={onPress}>
       {definition.TileContent ? (
