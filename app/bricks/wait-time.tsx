@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -176,8 +176,15 @@ function WaitTimeScreen() {
 
 export default function WaitTimeScreenWrapper() {
   const { instanceId } = useLocalSearchParams<{ instanceId: string }>();
+
+  useEffect(()=> {
+    return ()=>{
+      console.log("unrender")
+    }
+  },[])
+
   return (
-    <WaitTimeProvider instanceId={instanceId ?? "default"}>
+    <WaitTimeProvider instanceId={instanceId ?? "default"} intervalLength={20000}>
       <WaitTimeScreen />
     </WaitTimeProvider>
   );

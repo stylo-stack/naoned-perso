@@ -9,9 +9,10 @@ import {
 import { useTranslation } from "react-i18next";
 import { getNextDepartures } from "naolib-wait-time-js";
 import type { ArretStop } from "naolib-wait-time-js";
-import { colors} from "@/theme";
-import { getLineColor } from "../../utils/lineColors";
+
 import { styles } from "./styles";
+import { getLineColor } from "../../utils/lineColors";
+import { colors } from "@/theme";
 
 
 type DirectionOption = {

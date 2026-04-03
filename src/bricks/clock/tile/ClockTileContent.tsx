@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useClockTime, formatNantesTime } from '../ClockContext';
 import { useTranslation } from 'react-i18next';
@@ -21,8 +21,7 @@ export function ClockTileContent() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    borderColor: "red",
-    borderWidth: 2
+    margin: "auto",
   },
   time: {
     fontSize: 38,

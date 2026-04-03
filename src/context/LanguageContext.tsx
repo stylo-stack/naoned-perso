@@ -32,19 +32,19 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY).then((stored) => {
+    AsyncStorage.getItem(STORAGE_KEY).then(async (stored) => {
       if (
         stored &&
         (SUPPORTED_LANGUAGES as readonly string[]).includes(stored)
       ) {
         const lang = stored as SupportedLanguage;
         setLanguageState(lang);
-        i18n.changeLanguage(lang);
+        await i18n.changeLanguage(lang);
       } else {
         const deviceLocale = Localization.getLocales()[0]?.languageCode ?? "fr";
         const lang = resolveLanguage(deviceLocale);
         setLanguageState(lang);
-        i18n.changeLanguage(lang);
+        await i18n.changeLanguage(lang);
       }
       setIsLoading(false);
     });

@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import type { ArretStop } from "naolib-wait-time-js";
-import { getLineColor } from "../../utils/lineColors";
 import { styles } from "./styles";
+import { getLineColor } from "../../utils/lineColors";
 
 
 type ChooseDirectionStepProps = {
