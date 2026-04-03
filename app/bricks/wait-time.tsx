@@ -31,6 +31,7 @@ function WaitTimeScreen() {
     loading,
     error,
   } = useWaitTime();
+
   const { percent } = useNextFetchCountdown();
   const [isConfiguring, setIsConfiguring] = useState(false);
 

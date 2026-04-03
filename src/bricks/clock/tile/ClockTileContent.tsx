@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useClockTime, formatNantesTime } from '../ClockContext';
+import { useTranslation } from 'react-i18next';
 
 export function ClockTileContent() {
   const now = useClockTime();
+  const {t} = useTranslation()
   const { hours, minutes } = formatNantesTime(now);
 
   return (
@@ -11,7 +13,7 @@ export function ClockTileContent() {
       <Text style={styles.time}>
         {hours}:{minutes}
       </Text>
-      <Text style={styles.label}>Nantes</Text>
+      <Text style={styles.label}>{t("common.nantes")}</Text>
     </View>
   );
 }
@@ -19,6 +21,8 @@ export function ClockTileContent() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+    borderColor: "red",
+    borderWidth: 2
   },
   time: {
     fontSize: 38,

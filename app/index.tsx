@@ -71,6 +71,11 @@ export default function DashboardScreen() {
     <View style={styles.screen}>
       <ScreenHeader
         title="Naoned"
+        leftAction={
+          !isEditMode ? (
+            <HeaderButton label="⚙" onPress={() => router.push('/settings')} />
+          ) : undefined
+        }
         rightAction={
           isEditMode ? (
             <HeaderButton label={t('common.done')} onPress={handleDonePress} variant="primary" />
