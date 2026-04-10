@@ -6,11 +6,10 @@ The dashboard is made up of **bricks** — modular tiles you pick, reorder, and 
 
 ## Current bricks
 
-> These bricks are placeholders — the UI is in place but they display hardcoded data. Real API integration is planned for each.
+> Some of these bricks may be placeholders for ui and architecture development.
 
-- **Météo** — weather for Nantes
-- **Transports TAN** — upcoming departures from nearby stops (Naolib)
-- **Agenda** — local events in Nantes
+- **Time** — Time for Nantes
+- **TAN wait time** — upcoming departures from nearby stops (Naolib)
 
 ## Stack
 
